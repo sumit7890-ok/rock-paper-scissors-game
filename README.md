@@ -15,4 +15,4 @@ A modern, immersive web version of the classic game, featuring a beautiful Dark 
 *   Vanilla JavaScript (DOM Manipulation, Web Audio API)
 
 ## 🚀 Live Demo
-[Click here to play!]((https://sumit7890-ok.github.io/rock-paper-scissors-game/))
+[Click here to play!](https://sumit7890-ok.github.io/rock-paper-scissors-game/)
