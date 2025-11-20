@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rock, Paper, Scissors</title>
+  <!-- Icons & Fonts -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Lato:wght@400;700&family=Orbitron:wght@700&family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css"> 
+</head>
+
+<body>
+
+    <!-- SCENERY LAYER -->
+    <div id="scenery-layer">
+        <div class="particle p-1"></div>
+        <div class="particle p-2"></div>
+        <div class="particle p-3"></div>
+        <div class="particle p-4"></div>
+        <div class="particle p-5"></div>
+        <div class="particle p-6"></div>
+        <div class="particle p-7"></div>
+        <div class="particle p-8"></div>
+    </div>
+
+    <!-- RELOAD BUTTON -->
+    <button id="reload-btn" onclick="location.reload()">
+        <i class="fa-solid fa-rotate-right"></i>
+    </button>
+
+    <!-- MENU SCREEN -->
+    <div id="menu-screen">
+        <h2 class="menu-static-title">GAME MODE</h2>
+        <h1 class="menu-floating-title">CHOOSE!</h1>
+        
+        <div class="mode-container">
+            <!-- 1. Single Player -->
+            <div class="mode-card" 
+                 onclick="selectMode('cpu')" 
+                 onmouseenter="playHoverSound()">
+                <i class="fa-solid fa-robot mode-icon"></i> 
+                <div class="mode-text">Single Player</div>
+            </div>
+            
+            <!-- 2. Challenge Mode -->
+            <div class="mode-card" 
+                 onclick="selectMode('challenge')" 
+                 onmouseenter="playHoverSound()">
+                <i class="fa-solid fa-trophy mode-icon" style="color: #FFD700;"></i> 
+                <div class="mode-text">Random<br>Challenges</div>
+            </div>
+
+            <!-- 3. Multiplayer -->
+            <div class="mode-card" 
+                 onclick="selectMode('multi')" 
+                 onmouseenter="playHoverSound()">
+                <i class="fa-solid fa-user-group mode-icon"></i>
+                <div class="mode-text">2 Player<br>(Offline)</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- GAME SCREEN -->
+    <div id="game-screen" style="display: none;">
+        
+        <!-- BACK BUTTON -->
+        <button id="back-btn" onclick="playBackSound(); showMainMenu()">
+            <i class="fa-solid fa-arrow-left"></i>
+        </button>
+        
+        <h3 id="title-small">Make your choice</h3>
+        
+        <!-- SCORE BOARD -->
+        <div id="score-board" style="display: none;">
+            <div class="score-box">
+                <span class="score-label">YOU</span>
+                <span id="score-p1">0</span>
+            </div>
+            <div class="score-divider">:</div>
+            <div class="score-box">
+                <span class="score-label">CPU</span>
+                <span id="score-cpu">0</span>
+            </div>
+        </div>
+
+        <div class="status-head-wrapper">
+            <h1 id="status-head" class="floating-text">Choose!</h1>
+        </div>
+
+        <div class="game-button-wrapper">
+        </div>
+
+        <div class="move-display">
+             <h2></h2> 
+             <h2></h2> 
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

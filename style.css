@@ -1,0 +1,497 @@
+:root {
+    /* Dark Teal Stone Theme */
+    --bg-gradient: radial-gradient(circle at center, #2f5e63 0%, #1a3b41 50%, #0f2226 100%);
+    --text-color: #E0F2F1;      
+    --accent-color: #80CBC4;    
+    --glass-bg: rgba(255, 255, 255, 0.1);
+    --glass-border: rgba(255, 255, 255, 0.2);
+}
+
+    body {
+        margin: 0; padding: 0;
+        background: var(--bg-gradient);
+        font-family: 'Lato', sans-serif;
+        color: var(--text-color);
+        
+        /* --- SCROLL SETTINGS FOR REFRESH --- */
+        overflow-x: hidden; /* Keep birds from creating side scroll */
+        overflow-y: auto;   /* Allow vertical movement */
+        overscroll-behavior-y: auto; /* This enables the native "Pull to Refresh" */
+        -webkit-overflow-scrolling: touch; /* Smooth feel on iPhone */
+        
+        min-height: 100vh;
+        width: 100vw;
+        position: relative;
+        display: flex; align-items: center; justify-content: center;
+    }
+    /* --- TOP RIGHT RELOAD BUTTON --- */
+    #reload-btn {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        z-index: 100;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        color: rgba(255, 255, 255, 0.7);
+        width: 40px; height: 40px;
+        border-radius: 50%;
+        font-size: 1.2rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex; align-items: center; justify-content: center;
+        backdrop-filter: blur(4px);
+    }
+    
+    #reload-btn:hover {
+        background: rgba(255, 255, 255, 0.3);
+        color: #fff;
+        transform: rotate(180deg); /* Spins when hovered */
+    }
+/* --- SCENERY LAYER (Fireflies) --- */
+#scenery-layer {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    z-index: -1; pointer-events: none;
+}
+
+.particle {
+    position: absolute;
+    width: 6px; height: 6px;
+    background: rgba(255, 255, 255, 0.6);
+    border-radius: 50%;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.8); /* Glow effect */
+    animation: floatUp linear infinite;
+}
+
+@keyframes floatUp {
+    0% { transform: translateY(100vh) translateX(0); opacity: 0; }
+    20% { opacity: 1; }
+    80% { opacity: 0.8; }
+    100% { transform: translateY(-10vh) translateX(50px); opacity: 0; }
+}
+
+/* Randomize particles */
+.p-1 { left: 10%; animation-duration: 10s; width: 4px; height: 4px; }
+.p-2 { left: 30%; animation-duration: 15s; animation-delay: 2s; }
+.p-3 { left: 50%; animation-duration: 12s; animation-delay: 5s; width: 8px; height: 8px; }
+.p-4 { left: 70%; animation-duration: 18s; animation-delay: 1s; }
+.p-5 { left: 90%; animation-duration: 14s; animation-delay: 3s; }
+
+
+/* --- GAME CONTAINER (The Glass Card) --- */
+#game-screen {
+    width: 100%; height: 100%;
+    position: relative; z-index: 10;
+    display: grid;
+    grid-template-rows: 10% 25% 35% 20% 10%;
+    grid-template-columns: 1fr;
+}
+
+    @media (min-width: 768px) {
+        .main-container, #menu-screen, #game-screen {
+            /* Made Wider and Taller */
+            max-width: 600px; 
+            max-height: 900px; 
+            height: 90vh;
+            
+            /* Dark Glass Effect */
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 30px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+            overflow: hidden;
+        }
+        #menu-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; }
+    }
+/* --- TEXT STYLES --- */
+#title-small { 
+    text-align: center; font-size: 1rem; letter-spacing: 3px; 
+    text-transform: uppercase; color: #B2DFDB; 
+    align-self: center; grid-row-start: 1; 
+}
+
+/* --- SCORE BOARD (FIXED) --- */
+#score-board {
+    /* Visual Style */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 8px 30px;
+    border-radius: 30px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(8px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2); 
+
+    /* --- NEW POSITIONING --- */
+    /* Takes it out of the top-right corner and centers it */
+    position: absolute; 
+    top: 70px;   /* Pushes it below the "Beat The Computer" text */
+    left: 50%;   
+    transform: translateX(-50%); 
+    
+    z-index: 20;
+    margin: 0;
+    width: auto;
+}
+
+.score-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.score-label {
+    font-family: 'Lato', sans-serif;
+    font-size: 0.65rem;
+    color: rgba(255, 255, 255, 0.7);
+    letter-spacing: 2px;
+    font-weight: bold;
+    margin-bottom: 2px;
+}
+
+#score-p1, #score-cpu {
+    font-family: 'Orbitron', sans-serif; 
+    font-size: 1.3rem;
+    color: #fff;
+    font-weight: bold;
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+}
+
+.score-divider {
+    font-family: 'Lato', sans-serif;
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.3);
+    margin-top: 10px;
+}
+
+.status-head-wrapper { grid-row-start: 2; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+
+/* --- FLOATING TEXT ANIMATION --- */
+.floating-text {
+    /* This makes "Choose!" float up and down */
+    animation: floatText 3s ease-in-out infinite;
+}
+
+@keyframes floatText { 
+    0%, 100% { 
+        transform: translateY(0); 
+        text-shadow: 0 5px 15px rgba(0,0,0,0.2); /* Shadow close */
+    } 
+    50% { 
+        transform: translateY(-15px); /* Moves Up */
+        text-shadow: 0 20px 20px rgba(0,0,0,0.1); /* Shadow moves away */
+    } 
+}
+
+    /* --- 1. DEFAULT STATE ("Choose!" / "Victory!") --- */
+        
+    #status-head {
+        font-family: 'Cinzel', serif; 
+        font-size: 3rem; 
+        margin: 0;
+        padding: 0 20px; 
+        color: #fff;
+        text-align: center;
+        text-shadow: 0 0 20px rgba(128, 203, 196, 0.5);
+        transition: all 0.3s ease;
+        white-space: nowrap;
+        width: 100%;
+    }
+
+    /* --- 3. THINKING STATE (Static Sci-Fi Text) --- */
+    #status-head.pulsing {
+        /* Switch to Sci-Fi Font */
+        font-family: 'Orbitron', sans-serif;
+        font-size: 1.8rem; 
+        letter-spacing: 4px;
+        color: #E0FFFF; 
+        text-shadow: 
+            0 0 5px #00e5ff,
+            0 0 10px #00e5ff,
+            0 0 20px #00e5ff;
+            
+        /* Ensure it stops floating */
+        transform: translateY(0); 
+        animation: none; 
+    }
+    #status-head.pulsing {
+        font-family: 'Orbitron', sans-serif;
+        
+        /* Adjusted size to fit perfectly */
+        font-size: 1.6rem; 
+        letter-spacing: 2px; 
+        
+        color: #E0FFFF; 
+        text-shadow: 
+            0 0 5px #00e5ff,
+            0 0 10px #00e5ff,
+            0 0 20px #00e5ff;
+            
+        transform: translateY(0); 
+        animation: none; 
+    }
+/* --- GAME CARDS --- */
+.game-button-wrapper { grid-row-start: 3; display: flex; align-items: center; justify-content: center; gap: 20px; }
+
+.game-card {
+    width: 140px; height: 200px;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255,255,255,0.3);
+    display: flex; align-items: flex-end; justify-content: center;
+    cursor: pointer;
+    background-size: 80%; background-position: center; background-repeat: no-repeat;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    transition: transform 0.2s, background 0.3s;
+}
+
+.card-label {
+    background-color: rgba(0, 0, 0, 0.5);
+    width: 100%; text-align: center; padding: 8px 0;
+    font-family: 'Cinzel', serif; font-weight: bold; font-size: 0.9rem; color: #fff;
+    border-radius: 0 0 15px 15px;
+}
+:root {
+    /* Dark Teal Stone Theme */
+    --bg-gradient: radial-gradient(circle at center, #2f5e63 0%, #1a3b41 50%, #0f2226 100%);
+    --text-color: #E0F2F1;      
+    --accent-color: #80CBC4;    
+    --glass-bg: rgba(255, 255, 255, 0.1);
+    --glass-border: rgba(255, 255, 255, 0.2);
+}
+
+body {
+    margin: 0; padding: 0;
+    background: var(--bg-gradient);
+    font-family: 'Lato', sans-serif;
+    color: var(--text-color);
+    overflow-x: hidden; overflow-y: auto; overscroll-behavior-y: auto;
+    min-height: 100vh; width: 100vw;
+    position: relative;
+    display: flex; align-items: center; justify-content: center;
+}
+
+/* --- SCENERY LAYER --- */
+#scenery-layer { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
+
+.particle {
+    position: absolute; width: 6px; height: 6px;
+    background: rgba(255, 255, 255, 0.6); border-radius: 50%;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+    bottom: -10%; opacity: 0; animation: floatUp linear infinite;
+}
+
+@keyframes floatUp {
+    0% { bottom: -10%; opacity: 0; }
+    10% { opacity: 1; } 90% { opacity: 0.8; }
+    100% { bottom: 110%; opacity: 0; }
+}
+
+.p-1 { left: 10%; animation-duration: 10s; animation-delay: -2s; }
+.p-2 { left: 30%; animation-duration: 15s; animation-delay: -5s; }
+.p-3 { left: 50%; animation-duration: 12s; animation-delay: -8s; }
+.p-4 { left: 70%; animation-duration: 18s; animation-delay: -1s; }
+.p-5 { left: 90%; animation-duration: 14s; animation-delay: -7s; }
+.p-6 { left: 20%; animation-duration: 20s; animation-delay: -12s; }
+.p-7 { left: 80%; animation-duration: 16s; animation-delay: -4s; }
+.p-8 { left: 60%; animation-duration: 22s; animation-delay: -10s; }
+
+/* --- CONTAINERS --- */
+.main-container, #menu-screen, #game-screen {
+    width: 100%; height: 100%; position: relative; z-index: 10;
+}
+
+/* Menu Layout */
+#menu-screen {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+}
+
+/* Game Layout */
+#game-screen {
+    display: none; /* Hidden by default */
+    grid-template-rows: 10% 25% 35% 20% 10%;
+    grid-template-columns: 1fr;
+}
+
+@media (min-width: 768px) {
+    .main-container, #menu-screen, #game-screen {
+        max-width: 600px; max-height: 900px; height: 90vh;
+        background: var(--glass-bg);
+        backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+        border: 1px solid var(--glass-border); border-radius: 30px;
+        box-shadow: 0 25px 50px rgba(0,0,0,0.5); overflow: hidden;
+    }
+}
+
+/* --- TITLES --- */
+
+.menu-static-title {
+    font-family: 'Press Start 2P', cursive; 
+    font-size: 2.8rem;       /* Large size */
+    color: #fff;             /* Bright white */
+    text-align: center;
+    
+    /* Spacing */
+    margin-top: -195px;       /* Moves it up "a little bit" */
+    margin-bottom: 100px;
+    
+    /* Retro Shadow effect */
+    text-shadow: 4px 4px 0px #000, 
+                 0 0 20px rgba(128, 203, 196, 0.6);
+    
+    line-height: 2;
+}
+
+
+.menu-floating-title {
+    font-family: 'Cinzel', serif; 
+    font-size: 3.1rem;       
+    color: var(--accent-color);
+    text-align: center;
+    margin-bottom: 45x;
+    letter-spacing: 5px;     
+    text-transform: uppercase;
+    animation: floatText 3s ease-in-out infinite;
+}
+
+/* --- MENU CARDS --- */
+.mode-container { display: flex; gap: 25px; flex-wrap: wrap; justify-content: center; }
+.mode-card {
+    width: 130px; 
+    height: 180px;
+    background: rgba(255, 255, 255, 0.05); 
+    backdrop-filter: blur(5px);
+    border-radius: 20px; 
+    border: 1px solid rgba(255,255,255,0.2);
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    justify-content: center;
+    cursor: pointer; 
+    transition: all 0.3s; 
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+.mode-card:hover { transform: translateY(-10px); border-color: var(--accent-color); background: rgba(255,255,255,0.1); }
+.mode-icon { font-size: 3rem; color: var(--accent-color); margin-bottom: 15px; }
+.mode-text { font-weight: bold; font-size: 1rem; text-align: center; color: #E0F2F1; }
+
+/* --- GAME ELEMENTS --- */
+#title-small { 
+    text-align: center; font-size: 1rem; letter-spacing: 3px; 
+    text-transform: uppercase; color: #B2DFDB; align-self: center; grid-row-start: 1; 
+}
+.status-head-wrapper { grid-row-start: 2; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+
+#status-head {
+    font-family: 'Cinzel', serif; font-size: 3rem; margin: 0; padding: 0 20px;
+    color: #fff; text-align: center; text-shadow: 0 0 20px rgba(128, 203, 196, 0.5);
+    transition: all 0.3s ease; white-space: nowrap; width: 100%;
+}
+
+#status-head.pulsing {
+    font-family: 'Orbitron', sans-serif; font-size: 1.6rem; letter-spacing: 2px;
+    color: #E0FFFF; text-shadow: 0 0 5px #00e5ff, 0 0 10px #00e5ff;
+    transform: translateY(0); animation: none;
+}
+
+.floating-text { animation: floatText 3s ease-in-out infinite; }
+@keyframes floatText { 
+    0%, 100% { transform: translateY(0); text-shadow: 0 5px 15px rgba(0,0,0,0.2); } 
+    50% { transform: translateY(-15px); text-shadow: 0 20px 20px rgba(0,0,0,0.1); } 
+}
+
+/* --- GAME BUTTONS --- */
+.game-button-wrapper { grid-row-start: 3; display: flex; align-items: center; justify-content: center; gap: 20px; }
+.game-card {
+    width: 140px; height: 200px; border-radius: 20px;
+    background: rgba(255, 255, 255, 0.1); border: 2px solid rgba(255,255,255,0.3);
+    display: flex; align-items: flex-end; justify-content: center;
+    cursor: pointer; background-size: 80%; background-position: center; background-repeat: no-repeat;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3); transition: transform 0.2s;
+}
+.game-card:hover { transform: translateY(-10px); background-color: rgba(255,255,255,0.2); border-color: #fff; }
+.card-label {
+    background-color: rgba(0, 0, 0, 0.5); width: 100%; text-align: center; padding: 8px 0;
+    font-family: 'Cinzel', serif; font-weight: bold; font-size: 0.9rem; color: #fff; border-radius: 0 0 15px 15px;
+}
+
+/* IMAGES */
+.bg-rock { background-image: url("https://content.instructables.com/F02/BBV9/I7Q0TFTU/F02BBV9I7Q0TFTU.jpg?auto=webp&fit=bounds&frame=1"); }
+.bg-paper { background-image: url("https://content.instructables.com/FT9/YL66/I7Q0TFEK/FT9YL66I7Q0TFEK.jpg?auto=webp&frame=1&fit=bounds&md=MjAxNS0wMy0yNiAwNTo1MDoyNC4w"); }
+.bg-scissors { background-image: url("https://www.manmadediy.com/1227-rock-paper-scissors-2011-style/21mag-abstractimages-slide-irq1-jumbo.jpg"); }
+
+/* --- RESULTS --- */
+.move-display { grid-row-start: 4; display: flex; justify-content: center; gap: 30px; align-items: center; width: 100%; }
+.result-card {
+    width: 120px; height: 160px; border-radius: 15px; 
+    border: 2px solid rgba(255,255,255,0.5); background-color: rgba(0,0,0,0.3);
+    background-size: 70%; background-position: center; background-repeat: no-repeat; 
+    display: flex; align-items: flex-end; animation: popIn 0.5s ease-out;
+}
+.result-text { background: rgba(0, 0, 0, 0.7); color: white; width: 100%; text-align: center; padding: 5px 0; font-size: 0.8rem; border-radius: 0 0 10px 10px;}
+@keyframes popIn { from { transform: scale(0); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+/* --- UTILITY BUTTONS --- */
+#reload-btn, #back-btn {
+    position: absolute; z-index: 100; background: transparent; border: none; cursor: pointer; transition: 0.2s;
+}
+#reload-btn { top: 20px; right: 20px; background: rgba(255,255,255,0.1); width: 40px; height: 40px; border-radius: 50%; display: flex; justify-content: center; align-items: center; color: rgba(255,255,255,0.7); border: 1px solid rgba(255,255,255,0.3);}
+#reload-btn:hover { background: rgba(255,255,255,0.3); color: #fff; transform: rotate(180deg); }
+#back-btn { top: 25px; left: 25px; color: rgba(255,255,255,0.7); font-size: 1.8rem; }
+#back-btn:hover { color: #fff; transform: scale(1.2); }
+
+.action-btn {
+    display: inline-block; background: linear-gradient(135deg,#FF7A59 0%, #FFB86B 100%);
+    color: #072021; border: none; padding: 12px 34px; font-size: 1.05rem; border-radius: 999px;
+    cursor: pointer; margin-top: 10px; box-shadow: 0 8px 30px rgba(255,120,90,0.18); font-weight: 700;
+    transition: transform .18s ease;
+}
+.action-btn:hover { transform: translateY(-4px); }
+.game-card:hover { 
+    transform: translateY(-10px); 
+    background-color: rgba(255,255,255,0.2); 
+    border-color: #fff;
+    box-shadow: 0 0 20px rgba(128, 203, 196, 0.4); 
+}
+
+/* IMAGES */
+.bg-rock { background-image: url("https://content.instructables.com/F02/BBV9/I7Q0TFTU/F02BBV9I7Q0TFTU.jpg?auto=webp&fit=bounds&frame=1"); }
+.bg-paper { background-image: url("https://content.instructables.com/FT9/YL66/I7Q0TFEK/FT9YL66I7Q0TFEK.jpg?auto=webp&frame=1&fit=bounds&md=MjAxNS0wMy0yNiAwNTo1MDoyNC4w"); }
+.bg-scissors { background-image: url("https://www.manmadediy.com/1227-rock-paper-scissors-2011-style/21mag-abstractimages-slide-irq1-jumbo.jpg"); }
+
+/* --- RESULTS --- */
+.move-display { grid-row-start: 4; display: flex; justify-content: center; gap: 30px; align-items: center; width: 100%; }
+
+.result-card {
+    width: 120px; height: 160px; border-radius: 15px; 
+    border: 2px solid rgba(255,255,255,0.5);
+    background-size: 70%; background-position: center; background-repeat: no-repeat; 
+    background-color: rgba(0,0,0,0.3);
+    display: flex; align-items: flex-end;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.4); animation: popIn 0.5s ease-out;
+}
+.result-text { background: rgba(0, 0, 0, 0.7); color: white; width: 100%; text-align: center; padding: 5px 0; font-size: 0.8rem; border-radius: 0 0 10px 10px;}
+@keyframes popIn { from { transform: scale(0); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+/* --- PLAY AGAIN BUTTON (Coral Gradient) --- */
+.action-btn {
+    display: inline-block;
+    background: linear-gradient(135deg,#FF7A59 0%, #FFB86B 100%);
+    color: #072021; 
+    border: none;
+    padding: 12px 34px;
+    font-size: 1.05rem;
+    border-radius: 999px;
+    cursor: pointer;
+    margin-top: 10px;
+    box-shadow: 0 8px 30px rgba(255,120,90,0.18), 0 0 30px rgba(128,203,196,0.06);
+    font-weight: 700;
+    transition: transform .18s ease, box-shadow .18s ease;
+    position: relative;
+    overflow: hidden;
+}
+.action-btn:hover { transform: translateY(-4px); box-shadow: 0 14px 40px rgba(255,120,90,0.25); }
+.action-btn:active { transform: translateY(-1px) scale(.995); }
+.action-btn i { margin-right: 10px; }
