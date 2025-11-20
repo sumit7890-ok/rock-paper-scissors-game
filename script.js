@@ -55,7 +55,7 @@ function playRestartSound() {
 }
 
 function playHoverSound() {
-    if (!audioCtx) return; // Don't force init on hover
+    if (!audioCtx) return; 
     if (audioCtx.state === 'suspended') audioCtx.resume();
     const o = audioCtx.createOscillator(); const g = audioCtx.createGain();
     o.connect(g); g.connect(audioCtx.destination);
@@ -99,7 +99,7 @@ function playTieSound() {
 // --- MENU LOGIC ---
 
 window.selectMode = function(mode) {
-    playSound(); // Init audio on click
+    playSound(); 
     
     gameMode = mode;
     playerScore = 0;
@@ -298,4 +298,5 @@ function endChallenge(playerWon) {
             </button>
         </div>
     `;
+
 }
